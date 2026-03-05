@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: lyric-lang
+Version: 1.0.3
+Summary: Lyric is an experimental interpreted programming language developed by MiraNova Studios.
+Author-email: MiraNova Studios <aeonath@miranova.studio>
+Project-URL: Homepage, https://lyric-lang.org
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: flake8>=5.0.0; extra == "dev"
+Dynamic: license-file

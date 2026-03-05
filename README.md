@@ -1,6 +1,6 @@
 # Lyric
 
-Lyric is an experimental interpreted programming language built in Python. It features optional type declarations enforced at runtime, a classical hand-written interpreter pipeline (lexer → parser → AST → tree-walker), and Python interoperability via `importpy`.
+Lyric is an experimental interpreted programming language built in Python. It features optional type declarations enforced at runtime, a classical interpreter pipeline (lexer → parser → AST → tree-walker), and Python interoperability via `importpy`.
 
 **Current version:** 1.0.3 (Alpha)  
 **Website:** [lyric-lang.org](https://lyric-lang.org)  
