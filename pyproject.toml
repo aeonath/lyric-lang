@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lyric-lang"
+version = "1.0.3"
+description = "Lyric is an experimental interpreted programming language developed by MiraNova Studios."
+authors = [
+    {name = "MiraNova Studios", email = "aeonath@miranova.studio"}
+]
+readme = { file = "README_PYPI.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.14",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "flake8>=5.0.0",
+]
+
+[project.scripts]
+lyric = "lyric.cli:main"
+
+[project.urls]
+Homepage = "https://lyric-lang.org"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lyric*"]
+
+[tool.setuptools.package-data]
+lyric = ["lib/**/*.ly"]
