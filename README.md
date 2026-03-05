@@ -2,8 +2,8 @@
 
 Lyric is an experimental interpreted programming language built in Python. It features optional type declarations enforced at runtime, a classical hand-written interpreter pipeline (lexer → parser → AST → tree-walker), and Python interoperability via `importpy`.
 
-**Current version:** 1.0.3 (Alpha)
-**Website:** [lyric-lang.org](https://lyric-lang.org)
+**Current version:** 1.0.3 (Alpha)  
+**Website:** [lyric-lang.org](https://lyric-lang.org)  
 
 ## Install
 
@@ -28,8 +28,9 @@ Requires **Python 3.10+**.
 ```bash
 lyric program.ly          # run a file
 lyric run program.ly      # same thing
+
 lyric -i                  # interactive REPL
-lyric -i "print 2 + 2"   # evaluate an expression
+lyric> print "hello world"
 ```
 
 Lyric programs use the `.ly` extension. Execution starts in `main()`:
@@ -45,56 +46,45 @@ Shebang lines (`#!/usr/bin/env lyric`) are supported.
 
 ## Quick Tour
 
-```
-# Typed and untyped variables
-int count = 10
-str label = "items"
-var anything = [1, "two", 3.0]
-
+```lyric
 # Functions with typed parameters
 def greet(str name) {
     print "hello, " + name
 }
 
-# Classes with inheritance
-class Animal {
-    def init(str name) {
-        self.name = name
-    }
+def main() {
+    greet("world")
+
+    # Typed and untyped variables
+    int count = 10
+    str label = "items"
+    var anything = [1, "two", 3.0]
+
+    # Control flow
+    if count > 5
+        print "many " + label
+    end
+
+    for int i in range(count)
+        print i
+    done
+
+    # Exception handling
+    try:
+        int result = int("not a number")
+    catch ValueError as e :
+        print "caught: " + str(e)
+    fade
 }
-
-class Dog(Animal) {
-    def speak() {
-        print self.name + " says woof"
-    }
-}
-
-# Control flow
-if count > 5
-    print "many " + label
-end
-
-for i in range(count) {
-    print i
-}
-
-# Exception handling
-try {
-    int result = int("not a number")
-} catch ValueError as e {
-    print "caught: " + str(e)
-}
-
-# Python interop
-importpy json
-var data = json.loads('{"key": "value"}')
 ```
 
-See the [language specification](https://lyric-lang.org) for the full syntax reference.
+See the [tutorial](https://lyric-lang.org/tutorial.html) for getting started.
+
+See the [language specification](https://lyric-lang.org/specification.html) for the full syntax reference.
 
 ## Architecture
 
-All stages are hand-written in pure Python — no parser generators.
+This is a classic interperter with a lexer, a parser, and AST.
 
 ```
 lyric/
