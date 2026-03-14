@@ -82,7 +82,7 @@ class TestShebangExecution:
         
         try:
             # Test that the file executes correctly
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 0
             assert "Hello from shebang!" in result.stdout
@@ -96,7 +96,7 @@ class TestShebangExecution:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 0
             assert "Hello without shebang!" in result.stdout
@@ -110,7 +110,7 @@ class TestShebangExecution:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 0
             assert "Hello with comment!" in result.stdout
@@ -124,7 +124,7 @@ class TestShebangExecution:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 0
             assert "Hello with env shebang!" in result.stdout
@@ -138,7 +138,7 @@ class TestShebangExecution:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 0
             assert "Hello with custom path!" in result.stdout
@@ -184,7 +184,7 @@ class TestShebangErrorHandling:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 1
             assert "Error" in result.stderr or "Error" in result.stdout
@@ -198,7 +198,7 @@ class TestShebangErrorHandling:
             temp_file = f.name
         
         try:
-            result = subprocess.run([sys.executable, '-m', 'lyric.cli', temp_file], 
+            result = subprocess.run(['lyric', temp_file], 
                                   capture_output=True, text=True)
             assert result.returncode == 1
             assert "Runtime error" in result.stderr or "Runtime error" in result.stdout

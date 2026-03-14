@@ -14,7 +14,7 @@ def test_nested_control_flow():
     """Test nested if statements and loops."""
     source = """
 def main() {
-    x = 5
+    var x = 5
     if x > 0:
         print("x is positive")
         if x > 3:
@@ -64,7 +64,7 @@ def test_nested_loops():
     """Test nested loops (A2: loop inside if)."""
     source = """
 def main() {
-    x = 2
+    var x = 2
     if x > 0:
         print("Starting nested loop test")
         int i
@@ -144,8 +144,8 @@ def test_complex_nested_structure():
     """Test complex nested structure with multiple levels."""
     source = """
 def main() {
-    x = 1
-    y = 2
+    var x = 1
+    var y = 2
 
     if x > 0:
         print("x is positive")

@@ -23,21 +23,21 @@ class TestBuiltinsIntegration:
     
     def test_int_builtin_available(self):
         """Test that int built-in is available in interpreter."""
-        ast = parse('def main() { x = int("42") }')
+        ast = parse('def main() { var x = int("42") }')
         interpreter = evaluate(ast)
         # If we get here without error, int is working
         assert True
     
     def test_flt_builtin_available(self):
         """Test that flt built-in is available in interpreter."""
-        ast = parse('def main() { x = flt("3.14") }')
+        ast = parse('def main() { var x = flt("3.14") }')
         interpreter = evaluate(ast)
         # If we get here without error, flt is working
         assert True
     
     def test_str_builtin_available(self):
         """Test that str built-in is available in interpreter."""
-        ast = parse('def main() { x = str(42) }')
+        ast = parse('def main() { var x = str(42) }')
         interpreter = evaluate(ast)
         # If we get here without error, str is working
         assert True
@@ -47,8 +47,8 @@ class TestBuiltinsIntegration:
         # len() is no longer a standalone function - it's a method on arr and map objects
         code = '''
         def main() {
-            x = [1, 2, 3]
-            y = x.len()
+            var x = [1, 2, 3]
+            var y = x.len()
         }'''
         ast = parse(code)
         interpreter = evaluate(ast)

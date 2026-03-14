@@ -99,13 +99,13 @@ def rmdir(str path) {
 
 # return the (date, time)
 tup date() {
-    now = datetime.datetime.now()
+    var now = datetime.datetime.now()
     return (now.strftime("%Y-%m-%d"), now.strftime("%H:%M:%S"))
 }
 
 # return format string date
 str datefmt(str fmt) {
-    now = datetime.datetime.now()
+    var now = datetime.datetime.now()
     return now.strftime(fmt)
 }
 

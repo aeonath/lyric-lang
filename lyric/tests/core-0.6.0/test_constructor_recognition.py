@@ -28,7 +28,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            person = Person("Alice", 30)
+            var person = Person("Alice", 30)
             print("Person name:", person.name)
             print("Person age:", person.age)
         }
@@ -58,8 +58,8 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            calc = Calculator("MyCalc")
-            result = calc.add(5, 3)
+            var calc = Calculator("MyCalc")
+            var result = calc.add(5, 3)
             print("Result:", result)
             print("History:", calc.history)
         }
@@ -86,7 +86,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            counter = Counter()
+            var counter = Counter()
             var count1 = counter.increment()
             var count2 = counter.increment()
             print("Count:", count2)
@@ -122,7 +122,7 @@ class TestConstructorRecognition:
         
         def main() {
             var student_grades = [85, 92, 78, 96]
-            student = Student("Charlie", 12345, student_grades)
+            var student = Student("Charlie", 12345, student_grades)
             print("Student name:", student.name)
             print("Student ID:", student.id)
             print("Average:", student.get_average())
@@ -186,7 +186,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            account = BankAccount("Alice", 1000.0)
+            var account = BankAccount("Alice", 1000.0)
             account.deposit(500.0)
             account.withdraw(200.0)
             print("Final balance:", account.balance)
@@ -211,7 +211,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            point = Point()
+            var point = Point()
             point.x = 10
             point.y = 20
             print("Point:", point.x, point.y)
@@ -254,7 +254,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            config = Config()
+            var config = Config()
             config.update_config("debug", True)
             config.update_config("port", 9000)
             print("Debug:", config.debug)
@@ -284,7 +284,7 @@ class TestConstructorRecognition:
         
         def main() {
             # This should work with correct types
-            employee = Employee("David", 67890, 50000.0)
+            var employee = Employee("David", 67890, 50000.0)
             print("Employee name:", employee.name)
             print("Employee ID:", employee.id)
             print("Employee salary:", employee.salary)
@@ -323,7 +323,7 @@ class TestConstructorRecognition:
         +++
         
         def main() {
-            library = Library("Central Library")
+            var library = Library("Central Library")
             library.add_book("The Great Gatsby", "F. Scott Fitzgerald")
             library.add_book("1984", "George Orwell")
             var stats = library.get_stats()
@@ -353,7 +353,7 @@ class TestConstructorBackwardCompatibility:
         +++
         
         def main() {
-            person = Person("Bob", 25)
+            var person = Person("Bob", 25)
             print("Person name:", person.name)
             print("Person age:", person.age)
         }
@@ -383,7 +383,7 @@ class TestConstructorBackwardCompatibility:
         +++
         
         def main() {
-            person = Person("Alice", 30)
+            var person = Person("Alice", 30)
             print("Person name:", person.name)
             print("Person age:", person.age)
         }
@@ -411,10 +411,10 @@ class TestConstructorErrorHandling:
 
         def main() {
             # This should work
-            person1 = Person("Alice", 30)
+            var person1 = Person("Alice", 30)
 
             # Missing age param gets None (nullable) — no type error
-            person2 = Person("Bob")
+            var person2 = Person("Bob")
             print(person2.name)
             print(person2.age)
         }
@@ -448,7 +448,7 @@ class TestConstructorErrorHandling:
         
         def main() {
             # This should fail with type mismatch
-            person = Person("Alice", "thirty")
+            var person = Person("Alice", "thirty")
         }
         """
         
@@ -488,7 +488,7 @@ class TestConstructorIntegration:
         +++
         
         def main() {
-            calc = SafeCalculator("SafeCalc")
+            var calc = SafeCalculator("SafeCalc")
             var result1 = calc.safe_divide(10, 2)
             var result2 = calc.safe_divide(10, 0)
             print("Results:", result1, result2)
@@ -521,7 +521,7 @@ class TestConstructorIntegration:
         +++
         
         def main() {
-            counter = Counter(5)
+            var counter = Counter(5)
             counter.count_to_max()
         }
         """
@@ -556,7 +556,7 @@ class TestConstructorIntegration:
         +++
         
         def main() {
-            logger = Logger("AppLogger", "INFO")
+            var logger = Logger("AppLogger", "INFO")
             logger.log("Application started")
             logger.log("User logged in")
             print("Total messages:", logger.get_message_count())

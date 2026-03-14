@@ -101,6 +101,8 @@ def main():
         print("  -a, -b, -c, etc.                  Short options (single character)")
         print("  --verbose, --debug, etc.          Long options (multiple characters)")
         print("  --file=myfile                     Long option with value")
+        print("  --interpret                       Use tree-walking interpreter instead of compiler")
+        print("  --dump-ast                        Print the generated Python AST and exit")
         print("  --unsafe                          Allow importpy of non-whitelisted modules")
         print("                                    (blacklisted modules are still blocked)")
         print("")
@@ -146,7 +148,10 @@ def main():
             from lyric.pyproxy import set_unsafe_mode
             set_unsafe_mode(True)
 
-        _execute_file(file_path, arguments)
+        use_compiler = 'interpret' not in options and not os.environ.get('LYRIC_INTERPRET')
+        _execute_file(file_path, arguments,
+                      use_compiler=use_compiler,
+                      dump_ast='dump-ast' in options)
     elif command.endswith('.ly'):
         # Treat as shorthand for "lyric run <file.ly>"
         # Parse options from remaining args
@@ -163,7 +168,10 @@ def main():
             from lyric.pyproxy import set_unsafe_mode
             set_unsafe_mode(True)
 
-        _execute_file(file_path, arguments)
+        use_compiler = 'interpret' not in options and not os.environ.get('LYRIC_INTERPRET')
+        _execute_file(file_path, arguments,
+                      use_compiler=use_compiler,
+                      dump_ast='dump-ast' in options)
     else:
         print(f"Unknown command: {command}")
         print("Usage: lyric --version | lyric --help | lyric run <file.ly> | lyric <file.ly> | lyric -i [code]")
@@ -253,45 +261,61 @@ def _check_for_auto_help(source: str, file_path: str):
     return True
 
 
-def _execute_file(file_path: str, arguments: list = None):
+def _execute_file(file_path: str, arguments: list = None, use_compiler: bool = False, dump_ast: bool = False):
     """Execute a Lyric source file.
-    
+
     Args:
         file_path: Path to the .ly file to execute
         arguments: List of command-line arguments to pass to main()
+        use_compiler: If True, use the bytecode compiler instead of tree-walking
+        dump_ast: If True, print the generated Python AST and exit
     """
     if arguments is None:
         arguments = []
-    
+
     # Check if file exists
     if not os.path.exists(file_path):
         print(f"Error: File '{file_path}' not found")
         sys.exit(1)
-    
+
     # Check file extension
     if not file_path.endswith('.ly'):
         print(f"Error: File '{file_path}' is not a .ly file")
         sys.exit(1)
-    
+
     try:
         # Read and execute the file
         with open(file_path, 'r', encoding='utf-8') as f:
             source = f.read()
-        
+
         # Remove shebang line if present
         source = _remove_shebang(source)
-        
+
         # Check for auto-help before parsing/executing
         if _check_for_auto_help(source, file_path):
             sys.exit(0)
-        
+
         # Parse the source code
-        ast = parse(source)
-        
-        # Execute the program, passing the source file path for relative imports
-        # and the command-line arguments
-        evaluate(ast, source_file=file_path, cli_args=arguments)
-        
+        lyric_ast = parse(source)
+
+        if dump_ast:
+            # Dump the generated Python AST and exit
+            import ast as pyast
+            from lyric.compiler import LyricCompiler
+            compiler = LyricCompiler(source_file=file_path)
+            py_ast = compiler.compile_to_ast(lyric_ast)
+            print(pyast.dump(py_ast, indent=2))
+            sys.exit(0)
+
+        if use_compiler:
+            # Compiled path: transpile to Python AST and execute
+            from lyric.compiler import compile_lyric
+            code_obj = compile_lyric(lyric_ast, source_file=file_path)
+            exec(code_obj, {'__name__': '__main__', '__file__': file_path})
+        else:
+            # Interpreted path: tree-walking interpreter
+            evaluate(lyric_ast, source_file=file_path, cli_args=arguments)
+
     except (LexError, ParseError, SyntaxErrorLyric) as e:
         # Syntax/lexical errors
         if hasattr(e, 'line') and e.line > 0:
@@ -305,6 +329,10 @@ def _execute_file(file_path: str, arguments: list = None):
             print(f"Runtime error [line {e.line}]: {e.args[0] if e.args else str(e)}")
         else:
             print(f"Runtime error: {e}")
+        sys.exit(1)
+    except (NameError, TypeError, AttributeError, IndexError, KeyError, ZeroDivisionError) as e:
+        # Python runtime errors from compiled code — format as Lyric errors
+        print(f"Runtime error: {e}")
         sys.exit(1)
     except KeyboardInterrupt:
         print()

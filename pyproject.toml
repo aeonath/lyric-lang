@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lyric-lang"
-version = "1.0.3"
-description = "Lyric is an experimental interpreted programming language developed by MiraNova Studios."
+version = "1.1.1"
+description = "Lyric is an experimental programming language that transpiles to Python bytecode, developed by MiraNova Studios."
 authors = [
     {name = "MiraNova Studios", email = "aeonath@miranova.studio"}
 ]

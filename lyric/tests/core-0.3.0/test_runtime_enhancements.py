@@ -14,12 +14,12 @@ import sys
 def test_isinstance_function_a15():
     """Test isinstance built-in function (A15)."""
     source = """class Person
-    name = "Guest"
+    var name = "Guest"
 +++
 
 def main() {
-    person = Person()
-    
+    var person = Person()
+
     print("isinstance(person, Person):", isinstance(person, Person))
     print("isinstance(person, str):", isinstance(person, str))
     print("isinstance(5, int):", isinstance(5, int))
@@ -45,12 +45,12 @@ def main() {
 def test_type_function_a15():
     """Test type built-in function (A15)."""
     source = """class Person
-    name = "Guest"
+    var name = "Guest"
 +++
 
 def main() {
-    person = Person()
-    
+    var person = Person()
+
     print("type(person):", type(person))
     print("type(5):", type(5))
     print("type(3.14):", type(3.14))
@@ -99,7 +99,7 @@ def test_range_start_stop_a16():
 def test_safe_print_none_a17():
     """Test safe print for None (A17)."""
     source = """def main() {
-    x = None
+    var x = None
     print("x is:", x)
     print("None value:", None)
 }"""
@@ -121,10 +121,10 @@ def test_safe_print_none_a17():
 def test_safe_print_lists_a17():
     """Test safe print for lists (A17)."""
     source = """def main() {
-    numbers = range(3)
+    var numbers = range(3)
     print("numbers:", numbers)
-    
-    mixed = [1, "hello", 3.14]
+
+    var mixed = [1, "hello", 3.14]
     print("mixed:", mixed)
 }"""
     

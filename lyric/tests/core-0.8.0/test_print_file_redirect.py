@@ -34,7 +34,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -68,7 +68,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -102,7 +102,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -135,7 +135,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -172,7 +172,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -203,7 +203,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -229,7 +229,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )
@@ -253,7 +253,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True
         )

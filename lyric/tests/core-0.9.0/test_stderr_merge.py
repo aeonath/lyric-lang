@@ -25,7 +25,7 @@ def _run_lyric(source: str) -> subprocess.CompletedProcess:
         ly_file = f.name
     try:
         return subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', ly_file],
+            ['lyric', ly_file],
             capture_output=True, text=True, cwd=_CWD
         )
     finally:
@@ -75,7 +75,7 @@ def test_exec_redirect_captures_stderr_only(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") -> out
+    exec("python3 {py}") -> out
     print(out)
 }}
 """)
@@ -89,7 +89,7 @@ def test_exec_redirect_captures_stdout_and_stderr(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") -> out
+    exec("python3 {py}") -> out
     print(out)
 }}
 """)
@@ -104,7 +104,7 @@ def test_exec_redirect_captures_stderr_from_failing_command(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") -> out
+    exec("python3 {py}") -> out
     print(out)
 }}
 """)
@@ -118,7 +118,7 @@ def test_exec_redirect_stderr_multiline(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") -> out
+    exec("python3 {py}") -> out
     print(out)
 }}
 """)
@@ -138,7 +138,7 @@ def test_pipeline_stderr_from_first_command_is_piped(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") | exec("cat") -> out
+    exec("python3 {py}") | exec("cat") -> out
     print(out)
 }}
 """)
@@ -152,7 +152,7 @@ def test_pipeline_stdout_and_stderr_from_first_command_are_piped(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py}") | exec("cat") -> out
+    exec("python3 {py}") | exec("cat") -> out
     print(out)
 }}
 """)
@@ -168,7 +168,7 @@ def test_pipeline_stderr_from_last_command_captured(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py_first}") | exec("python {py_last}") -> out
+    exec("python3 {py_first}") | exec("python3 {py_last}") -> out
     print(out)
 }}
 """)
@@ -182,7 +182,7 @@ def test_pipeline_stderr_propagates_through_cat_stages(py_script):
     result = _run_lyric(f"""
 def main() {{
     str out
-    exec("python {py1}") | exec("cat") | exec("cat") -> out
+    exec("python3 {py1}") | exec("cat") | exec("cat") -> out
     print(out)
 }}
 """)
@@ -201,7 +201,7 @@ def test_append_to_file_captures_stderr(py_script, tmp_path):
     result = _run_lyric(f"""
 def main() {{
     dsk f = disk("{out_file}")
-    exec("python {py}") ->> f
+    exec("python3 {py}") ->> f
     f.close()
     dsk r = disk("{out_file}")
     str content = r.read()
@@ -220,7 +220,7 @@ def test_append_to_file_captures_stdout_and_stderr(py_script, tmp_path):
     result = _run_lyric(f"""
 def main() {{
     dsk f = disk("{out_file}")
-    exec("python {py}") ->> f
+    exec("python3 {py}") ->> f
     f.close()
     dsk r = disk("{out_file}")
     str content = r.read()

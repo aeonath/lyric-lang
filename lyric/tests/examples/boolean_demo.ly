@@ -3,8 +3,8 @@ def main() {
     
     # Test comparison operators
     print("\n=== Comparison Operators ===")
-    x = 5
-    y = 3
+    var x = 5
+    var y = 3
     
     if x == 5
         print("x equals 5")
@@ -32,8 +32,8 @@ def main() {
     
     # Test logical operators
     print("\n=== Logical Operators ===")
-    a = 10
-    b = 0
+    var a = 10
+    var b = 0
     
     if a > 0 and b == 0
         print("Both conditions true: a > 0 and b == 0")
@@ -91,9 +91,9 @@ def main() {
     
     # Test complex boolean expressions
     print("\n=== Complex Boolean Expressions ===")
-    p = 5
-    q = 3
-    r = 0
+    var p = 5
+    var q = 3
+    var r = 0
     
     if p > q and q > r
         print("p > q and q > r")

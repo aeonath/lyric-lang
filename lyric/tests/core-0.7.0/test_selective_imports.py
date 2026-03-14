@@ -125,7 +125,7 @@ class Square
         
         code = """
 import shapes; Circle
-Circle c = Circle(5)
+var c = Circle(5)
 print c.radius
 """
         self._run_code(code)
@@ -174,7 +174,7 @@ class Tool
         code = """
 import utils; helper, Tool
 print helper(5)
-Tool t = Tool(10)
+var t = Tool(10)
 print t.value
 """
         self._run_code(code)
@@ -224,7 +224,7 @@ class Rectangle
         
         code = """
 import shapes; Circle, Rectangle
-Circle circ = Circle(5)
+var circ = Circle(5)
 print circ.area()
 """
         self._run_code(code)

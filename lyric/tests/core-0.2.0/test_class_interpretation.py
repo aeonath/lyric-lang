@@ -14,12 +14,12 @@ import sys
 def test_class_definition_and_instantiation_a12():
     """Test defining a class and creating an instance (A12)."""
     source = """class Person
-    name = "Guest"
-    age = 25
+    var name = "Guest"
+    var age = 25
 +++
 
 def main() {
-    person = Person()
+    var person = Person()
     print("Created person instance")
 }"""
     
@@ -39,14 +39,14 @@ def main() {
 def test_class_method_call_a13():
     """Test calling an instance method (A13)."""
     source = """class Player
-    name = "Guest"
-    def greet() { 
-        print("Hello,", self.name) 
+    var name = "Guest"
+    def greet() {
+        print("Hello,", self.name)
     }
 +++
 
 def main() {
-    player = Player()
+    var player = Player()
     player.greet()
 }"""
     
@@ -66,7 +66,7 @@ def main() {
 def test_instance_variables_a14():
     """Test instance variables are stored in each object dictionary (A14)."""
     source = """class Person
-    name = "Default"
+    var name = "Default"
     def set_name(new_name) {
         self.name = new_name
     }
@@ -76,8 +76,8 @@ def test_instance_variables_a14():
 +++
 
 def main() {
-    person1 = Person()
-    person2 = Person()
+    var person1 = Person()
+    var person2 = Person()
     
     person1.set_name("Alice")
     person2.set_name("Bob")
@@ -103,12 +103,12 @@ def main() {
 def test_class_without_methods():
     """Test simple class with just attributes."""
     source = """class Point
-    x = 0
-    y = 0
+    var x = 0
+    var y = 0
 +++
 
 def main() {
-    point = Point()
+    var point = Point()
     print("Point created:", point.x, point.y)
 }"""
     
@@ -134,8 +134,8 @@ def test_class_instantiation_syntax():
 +++
 
 def main() {
-    calc = Calculator()
-    result = calc.add(5, 3)
+    var calc = Calculator()
+    var result = calc.add(5, 3)
     print("Result:", result)
 }"""
     

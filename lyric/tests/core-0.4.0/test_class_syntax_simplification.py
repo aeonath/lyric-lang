@@ -16,14 +16,14 @@ from lyric.errors import SyntaxErrorLyric
 def test_class_without_colon_syntax():
     """Test that class declarations without colons work correctly."""
     source = """class TestClass
-    name = "test"
+    var name = "test"
     def greet() {
         return "Hello from " + self.name
     }
 +++
 
 def main() {
-    instance = TestClass()
+    var instance = TestClass()
     return instance.greet()
 }"""
     
@@ -35,7 +35,7 @@ def main() {
 def test_class_with_colon_syntax_works():
     """Test that class declarations with colons work without warnings."""
     source = """class TestClass:
-    name = "test"
+    var name = "test"
     def greet() {
         return "Hello from " + self.name
     }
@@ -52,7 +52,7 @@ def test_class_with_colon_syntax_works():
 def test_class_syntax_does_not_affect_other_constructs():
     """Test that removing colons from classes doesn't affect other constructs."""
     source = """class TestClass
-    name = "test"
+    var name = "test"
 +++
 
 def test_function() {
@@ -113,14 +113,14 @@ def test_class_with_methods():
 def test_class_instantiation_works():
     """Test that class instantiation works."""
     source = """class TestClass
-    name = "test"
+    var name = "test"
     def get_name() {
         return self.name
     }
 +++
 
 def main() {
-    instance = TestClass()
+    var instance = TestClass()
     return instance.get_name()
 }"""
     
@@ -138,7 +138,7 @@ def test_class_with_init_method():
 +++
 
 def main() {
-    person = Person("Alice")
+    var person = Person("Alice")
     return person.name
 }"""
     
@@ -151,16 +151,16 @@ def main() {
 def test_multiple_classes():
     """Test multiple class declarations."""
     source = """class Person
-    name = "Default"
+    var name = "Default"
 +++
 
 class Student
-    grade = "A"
+    var grade = "A"
 +++
 
 def main() {
-    person = Person()
-    student = Student()
+    var person = Person()
+    var student = Student()
     return person.name + " " + student.grade
 }"""
     

@@ -2,7 +2,7 @@
 
 # Example demonstrating elif keyword in Lyric
 def main() {
-    x = 2
+    var x = 2
     
     if x == 1:
         print("x is one")
@@ -15,7 +15,7 @@ def main() {
     end
     
     # Test with elif syntax
-    y = 0
+    var y = 0
     if y > 0:
         print("positive")
     elif y < 0:

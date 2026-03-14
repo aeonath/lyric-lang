@@ -29,7 +29,7 @@ def test_evaluate_function_definition():
 def test_evaluate_if_else_statement():
     """Test evaluating if/else statement."""
     source = '''def main() {
-x = 5
+var x = 5
 if x > 0
 print("positive")
 else
@@ -89,7 +89,7 @@ done
 def test_evaluate_class_definition():
     """Test evaluating class definition: class Player name = "Guest" def greet() { print("Hello,", self.name) } +++"""
     source = '''class Player
-name = "Guest"
+var name = "Guest"
 def greet() {
 print("Hello,", self.name)
 }
@@ -116,7 +116,7 @@ print("Hello,", self.name)
 def test_evaluate_else_if_sequence():
     """Test evaluating else-if sequence."""
     source = '''def main() {
-x = 5
+var x = 5
 if x > 10:
 print("high")
 elif x > 5:
@@ -153,7 +153,7 @@ end
 def test_evaluate_binary_operations():
     """Test evaluating binary operations with precedence."""
     source = '''def main() {
-result = 2 + 3 * 4 - 1
+var result = 2 + 3 * 4 - 1
 print(result)
 }'''
     
@@ -183,7 +183,7 @@ return x + y
 }
 
 def main() {
-result = add(3, 4)
+var result = add(3, 4)
 print(result)
 }'''
     
@@ -209,9 +209,9 @@ print(result)
 def test_evaluate_complex_nested_structure():
     """Test evaluating a complex nested structure."""
     source = '''def main() {
-    x = 10
+    var x = 10
     if x > 5:
-        y = x * 2
+        var y = x * 2
         if y > 15:
             print("nested if")
         else:
@@ -246,12 +246,12 @@ def test_evaluate_complex_nested_structure():
 def test_evaluate_variable_scope():
     """Test variable scope handling."""
     source = '''def test_scope() {
-local_var = "local"
+var local_var = "local"
 print(local_var)
 }
 
 def main() {
-global_var = "global"
+var global_var = "global"
 test_scope()
 print(global_var)
 }'''
@@ -295,7 +295,7 @@ def test_evaluate_error_handling():
         evaluate(ast)
     
     # Test division by zero
-    source = 'def main() { result = 5 / 0 }'
+    source = 'def main() { var result = 5 / 0 }'
     ast = parse(source)
     
     with pytest.raises(RuntimeErrorLyric):
@@ -305,12 +305,12 @@ def test_evaluate_error_handling():
 def test_evaluate_member_access():
     """Test member access evaluation."""
     source = '''class Person
-name = "John"
-age = 30
+var name = "John"
+var age = 30
 +++
 
 def main() {
-person = Person
+var person = Person
 print(person.name)
 print(person.age)
 }'''
@@ -338,11 +338,11 @@ print(person.age)
 def test_evaluate_logical_operations():
     """Test logical operations evaluation."""
     source = '''def main() {
-a = true
-b = false
-result1 = a and b
-result2 = a or b
-result3 = not a
+var a = true
+var b = false
+var result1 = a and b
+var result2 = a or b
+var result3 = not a
 print(result1, result2, result3)
 }'''
     
@@ -393,7 +393,7 @@ def test_evaluate_hello_example():
 def test_evaluate_if_demo_example():
     """Test evaluating the if_demo.ly example."""
     source = """def main() {
-    x = 5
+    var x = 5
     if x > 0:
         print("positive")
     else:
@@ -451,20 +451,20 @@ def test_evaluate_loop_example():
 def test_evaluate_class_instantiation():
     """Test class instantiation and method calls."""
     source = """class Person
-    name = "Guest"
-    age = 25
-    
+    var name = "Guest"
+    var age = 25
+
     def greet() {
         print("Hello, I'm", self.name)
     }
-    
+
     def set_name(new_name) {
         self.name = new_name
     }
 +++
 
 def main() {
-    person = Person()
+    var person = Person()
     person.greet()
     person.set_name("Alice")
     person.greet()
@@ -478,7 +478,7 @@ def main() {
 def test_evaluate_nested_control_flow():
     """Test nested if statements and loops."""
     source = """def main() {
-    x = 5
+    var x = 5
     if x > 0:
         print("x is positive")
         if x > 3:
@@ -523,11 +523,11 @@ def test_evaluate_error_reporting():
 def test_evaluate_isinstance_function():
     """Test isinstance function with classes and built-in types."""
     source = """class Person
-    name = "Guest"
+    var name = "Guest"
 +++
 
 def main() {
-    person = Person()
+    var person = Person()
     print("isinstance(person, Person):", isinstance(person, Person))
     print("isinstance(5, int):", isinstance(5, int))
     print("isinstance(5, str):", isinstance(5, str))
@@ -541,11 +541,11 @@ def main() {
 def test_evaluate_type_function():
     """Test type function with classes and built-in types."""
     source = """class Person
-    name = "Guest"
+    var name = "Guest"
 +++
 
 def main() {
-    person = Person()
+    var person = Person()
     print("type(person):", type(person))
     print("type(5):", type(5))
     print("type(3.14):", type(3.14))
@@ -560,13 +560,13 @@ def main() {
 def test_evaluate_list_literals():
     """Test list literal creation and manipulation."""
     source = """def main() {
-    numbers = [1, 2, 3]
+    var numbers = [1, 2, 3]
     print("numbers:", numbers)
-    
-    mixed = [1, "hello", 3.14]
+
+    var mixed = [1, "hello", 3.14]
     print("mixed:", mixed)
-    
-    empty = []
+
+    var empty = []
     print("empty:", empty)
 }"""
     
@@ -578,7 +578,7 @@ def test_evaluate_list_literals():
 def test_evaluate_none_literal():
     """Test None literal handling."""
     source = """def main() {
-    x = None
+    var x = None
     print("x is:", x)
     print("None value:", None)
 }"""
@@ -605,20 +605,20 @@ def test_evaluate_range_enhancements():
 def test_evaluate_complex_class_interaction():
     """Test complex class interactions with multiple classes."""
     source = """class Person
-    name = "Guest"
-    
+    var name = "Guest"
+
     def greet() {
         print("Hello, I'm", self.name)
     }
-    
+
     def set_name(new_name) {
         self.name = new_name
     }
 +++
 
 class Student
-    name = "Student"
-    grade = "A"
+    var name = "Student"
+    var grade = "A"
     
     def introduce() {
         print("Hi, I'm", self.name, "with grade", self.grade)
@@ -626,8 +626,8 @@ class Student
 +++
 
 def main() {
-    person = Person()
-    student = Student()
+    var person = Person()
+    var student = Student()
     
     person.greet()
     student.introduce()
@@ -647,7 +647,7 @@ def main() {
 def test_evaluate_method_call_errors():
     """Test error handling for method calls on non-objects."""
     source = """def main() {
-    x = 5
+    var x = 5
     x.non_existent_method()
 }"""
     
@@ -663,7 +663,7 @@ def test_evaluate_method_call_errors():
 def test_evaluate_class_instantiation_errors():
     """Test error handling for undefined class instantiation."""
     source = """def main() {
-    result = NonExistentClass()
+    var result = NonExistentClass()
 }"""
     
     ast = parse(source)

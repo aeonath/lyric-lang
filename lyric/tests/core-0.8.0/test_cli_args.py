@@ -25,7 +25,7 @@ def main() {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -51,7 +51,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, 'arg1', 'arg2', 'arg3'],
+            ['lyric', temp_file, 'arg1', 'arg2', 'arg3'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -83,7 +83,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', '--verbose', 'arg1', 'arg2'],
+            ['lyric', temp_file, '-a', '--verbose', 'arg1', 'arg2'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -118,7 +118,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, 'hello', 'world'],
+            ['lyric', temp_file, 'hello', 'world'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -147,7 +147,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -181,7 +181,7 @@ def main(int argc, arr argv) {
     try:
         # Command: lyric myprogram -a arg1 arg2
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', 'arg1', 'arg2'],
+            ['lyric', temp_file, '-a', 'arg1', 'arg2'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -212,7 +212,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', 'run', temp_file, 'test1', 'test2'],
+            ['lyric', 'run', temp_file, 'test1', 'test2'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -251,7 +251,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', '--file=data.txt', 
+            ['lyric', temp_file, '-a', '--file=data.txt', 
              'input1.txt', '--verbose', 'input2.txt'],
             capture_output=True,
             text=True,
@@ -287,7 +287,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, 'a', 'b', 'c'],
+            ['lyric', temp_file, 'a', 'b', 'c'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -318,7 +318,7 @@ def main(int argc, arr argv) {
     
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '123'],
+            ['lyric', temp_file, '123'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))

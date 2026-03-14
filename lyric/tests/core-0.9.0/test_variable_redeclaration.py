@@ -3,18 +3,10 @@
 # All rights reserved.
 
 """
-Test suite for variable redeclaration as reassignment.
+Test suite for variable redeclaration rejection.
 
-Redeclaring a variable in the same scope now acts as reassignment
-instead of raising a "Variable already declared" error. This is
-essential for patterns like `var x = expr` inside loop bodies.
-
-Tests:
-- Simple redeclaration at top level
-- Redeclaration inside a loop body
-- Typed redeclaration respects type checks
-- Multi-variable redeclaration
-- Redeclaration preserves latest value
+Redeclaring a variable in the same scope is now an error.
+Variables must be declared once, then reassigned without a type keyword.
 """
 
 import pytest
@@ -55,90 +47,104 @@ def run_code_capture(code: str) -> str:
     return captured.getvalue()
 
 
-class TestSimpleRedeclaration:
+class TestRedeclarationRejected:
     def test_var_redeclare_same_scope(self):
-        """var x = 1 then var x = 2 should work."""
-        code = 'var x = 1\nvar x = 2\nprint(x)'
+        """var x = 1 then var x = 2 should fail."""
+        code = 'var x = 1\nvar x = 2'
+        with pytest.raises(RuntimeErrorLyric, match="already declared"):
+            ast = parse(code, interactive=True)
+            evaluate(ast)
+
+    def test_int_redeclare_same_scope(self):
+        """int x = 1 then int x = 5 should fail."""
+        code = 'int x = 1\nint x = 5'
+        with pytest.raises(RuntimeErrorLyric, match="already declared"):
+            ast = parse(code, interactive=True)
+            evaluate(ast)
+
+    def test_str_redeclare_same_scope(self):
+        """str s = 'a' then str s = 'b' should fail."""
+        code = 'str s = "hello"\nstr s = "world"'
+        with pytest.raises(RuntimeErrorLyric, match="already declared"):
+            ast = parse(code, interactive=True)
+            evaluate(ast)
+
+    def test_var_then_int_redeclare(self):
+        """var x then int x should fail."""
+        code = 'var x = 1\nint x = 5'
+        with pytest.raises(RuntimeErrorLyric, match="already declared"):
+            ast = parse(code, interactive=True)
+            evaluate(ast)
+
+    def test_int_then_str_redeclare(self):
+        """int x then str x should fail."""
+        code = 'int x = 1\nstr x = "hello"'
+        with pytest.raises(RuntimeErrorLyric, match="already declared"):
+            ast = parse(code, interactive=True)
+            evaluate(ast)
+
+
+class TestReassignmentWorks:
+    def test_var_reassign(self):
+        """var x = 1 then x = 2 should work."""
+        code = 'var x = 1\nx = 2\nprint(x)'
         output = run_code_capture(code)
         assert output.strip() == "2"
 
-    def test_int_redeclare_same_scope(self):
-        """int x = 1 then int x = 5 should work."""
-        code = 'int x = 1\nint x = 5\nprint(x)'
+    def test_int_reassign(self):
+        """int x = 1 then x = 5 should work."""
+        code = 'int x = 1\nx = 5\nprint(x)'
         output = run_code_capture(code)
         assert output.strip() == "5"
 
-    def test_str_redeclare_same_scope(self):
-        """str s = 'a' then str s = 'b' should work."""
-        code = 'str s = "hello"\nstr s = "world"\nprint(s)'
+    def test_str_reassign(self):
+        """str s = 'a' then s = 'b' should work."""
+        code = 'str s = "hello"\ns = "world"\nprint(s)'
         output = run_code_capture(code)
         assert output.strip() == "world"
 
 
-class TestRedeclarationInLoop:
-    def test_var_redeclare_in_loop(self):
-        """var x = expr inside a loop should not fail on iteration 2+."""
+class TestLoopWithDeclaration:
+    def test_declare_before_loop(self):
+        """Declare variable before loop, reassign inside."""
         code = '''var result = ""
+var x
 var i
 for i in [1, 2, 3]
-    var x = i * 10
-    result += str(x) + " "
+    x = i * 10
+    result = result + str(x) + " "
 done
 print(result)'''
         output = run_code_capture(code)
         assert output.strip() == "10 20 30"
 
-    def test_int_redeclare_in_loop(self):
-        """int x = expr inside a loop should not fail on iteration 2+."""
+    def test_typed_declare_before_loop(self):
+        """Typed declaration before loop, reassign inside."""
         code = '''int total = 0
+int x
 var i
 for i in [5, 10, 15]
-    int x = i + 1
-    total += x
+    x = i + 1
+    total = total + x
 done
 print(total)'''
         output = run_code_capture(code)
         assert output.strip() == "33"
 
-    def test_str_redeclare_in_loop(self):
-        """str s = expr inside a loop should not fail on iteration 2+."""
-        code = '''var result = ""
-var word
-for word in ["hello", "world"]
-    str greeting = word + "!"
-    result += greeting + " "
-done
-print(result)'''
-        output = run_code_capture(code)
-        assert output.strip() == "hello! world!"
 
-
-class TestRedeclarationTypeChecks:
-    def test_typed_redeclare_type_mismatch(self):
-        """Redeclaring int x then assigning a string should still fail."""
-        code = 'int x = 1\nint x = "hello"'
-        with pytest.raises(RuntimeErrorLyric):
+class TestUndeclaredVariableRejected:
+    def test_bare_assignment_fails(self):
+        """x = 5 without declaration should fail."""
+        code = 'x = 5'
+        with pytest.raises(RuntimeErrorLyric, match="not declared"):
             ast = parse(code, interactive=True)
             evaluate(ast)
 
-    def test_var_redeclare_allows_type_change(self):
-        """var allows redeclaration with a different type."""
-        code = 'var x = 1\nvar x = "hello"\nprint(x)'
-        output = run_code_capture(code)
-        assert output.strip() == "hello"
-
-
-class TestMultiDeclarationRedeclare:
-    def test_multi_var_redeclare(self):
-        """Multi-variable redeclaration should work."""
-        code = 'var a, var b\nvar a, var b\nprint("ok")'
-        output = run_code_capture(code)
-        assert output.strip() == "ok"
-
-
-class TestRedeclarationPreservesValue:
-    def test_latest_value_wins(self):
-        """After multiple redeclarations, the last value should persist."""
-        code = 'var x = 10\nvar x = 20\nvar x = 30\nprint(x)'
-        output = run_code_capture(code)
-        assert output.strip() == "30"
+    def test_bare_assignment_in_function_fails(self):
+        """Bare assignment inside a function should fail."""
+        code = '''def main() {
+    x = 5
+}'''
+        with pytest.raises(RuntimeErrorLyric, match="not declared"):
+            ast = parse(code)
+            evaluate(ast)

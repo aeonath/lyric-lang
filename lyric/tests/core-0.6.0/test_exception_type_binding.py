@@ -292,7 +292,7 @@ def test_catch_with_finally():
             var items = [1, 2, 3]
             var x = items[10]
         catch IndexError as e:
-            result = "caught"
+            var result = "caught"
         finally:
             result = "finally"
         fade

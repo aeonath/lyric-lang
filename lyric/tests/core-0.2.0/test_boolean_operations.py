@@ -14,9 +14,9 @@ def test_comparison_operators():
     """Test all comparison operators (A4)."""
     source = """
 def main() {
-    x = 5
-    y = 3
-    
+    var x = 5
+    var y = 3
+
     if x == 5:
         print("x equals 5")
     end
@@ -69,9 +69,9 @@ def test_logical_operators():
     """Test logical operators and, or, not (A4)."""
     source = """
 def main() {
-    x = 5
-    y = 0
-    
+    var x = 5
+    var y = 0
+
     if x > 0 and y == 0:
         print("Both conditions true")
     end
@@ -200,9 +200,9 @@ def test_complex_boolean_expressions():
     """Test complex boolean expressions with proper precedence."""
     source = """
 def main() {
-    x = 5
-    y = 3
-    z = 0
+    var x = 5
+    var y = 3
+    var z = 0
     
     if x > y and y > z:
         print("x > y and y > z")

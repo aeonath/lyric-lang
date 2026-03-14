@@ -30,7 +30,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a'],
+            ['lyric', temp_file, '-a'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -38,7 +38,7 @@ def main() {
         assert "Option -a was provided" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -67,7 +67,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--verbose'],
+            ['lyric', temp_file, '--verbose'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -75,7 +75,7 @@ def main() {
         assert "Verbose mode enabled" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -104,7 +104,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--file=myfile.txt'],
+            ['lyric', temp_file, '--file=myfile.txt'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -112,7 +112,7 @@ def main() {
         assert "File: myfile.txt" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -142,7 +142,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', '--verbose', '--file=test.txt'],
+            ['lyric', temp_file, '-a', '--verbose', '--file=test.txt'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -174,7 +174,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -208,7 +208,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', '--verbose', '--file=myfile'],
+            ['lyric', temp_file, '-a', '--verbose', '--file=myfile'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -236,7 +236,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', 'run', temp_file, '--debug'],
+            ['lyric', 'run', temp_file, '--debug'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -264,7 +264,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-v'],
+            ['lyric', temp_file, '-v'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -273,7 +273,7 @@ def main() {
         assert "verbose: False" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--verbose'],
+            ['lyric', temp_file, '--verbose'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -305,7 +305,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-a', '--input=in.txt', '-b', '--output=out.txt', '--verbose'],
+            ['lyric', temp_file, '-a', '--input=in.txt', '-b', '--output=out.txt', '--verbose'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -331,7 +331,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--value='],
+            ['lyric', temp_file, '--value='],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -360,7 +360,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-h'],
+            ['lyric', temp_file, '-h'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -389,7 +389,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--help'],
+            ['lyric', temp_file, '--help'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -418,7 +418,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -447,7 +447,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-hc'],
+            ['lyric', temp_file, '-hc'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -455,7 +455,7 @@ def main() {
         assert "high capacity mode" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--high-capacity'],
+            ['lyric', temp_file, '--high-capacity'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -463,7 +463,7 @@ def main() {
         assert "high capacity mode" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file],
+            ['lyric', temp_file],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -488,7 +488,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-o=result.txt'],
+            ['lyric', temp_file, '-o=result.txt'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -496,7 +496,7 @@ def main() {
         assert "output: result.txt" in result.stdout
 
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--output=result.txt'],
+            ['lyric', temp_file, '--output=result.txt'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -521,7 +521,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '--verbose'],
+            ['lyric', temp_file, '--verbose'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -546,7 +546,7 @@ def main() {
 
     try:
         result = subprocess.run(
-            [sys.executable, '-m', 'lyric.cli', temp_file, '-v'],
+            ['lyric', temp_file, '-v'],
             capture_output=True,
             text=True,
             cwd=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))

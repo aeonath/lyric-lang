@@ -27,8 +27,8 @@ def test_class_with_init_method_a11():
     +++
     
     def main() {
-        person = Person("Alice", 30)
-        info = person.get_info()
+        var person = Person("Alice", 30)
+        var info = person.get_info()
         return info
     }'''
     
@@ -45,7 +45,7 @@ def test_method_calls_instance_syntax_a12():
             self.history = []
         }
         def add(a, b) {
-            result = a + b
+            var result = a + b
             self.history = self.history + [result]
             return result
         }
@@ -55,10 +55,10 @@ def test_method_calls_instance_syntax_a12():
     +++
     
     def main() {
-        calc = Calculator()
-        result1 = calc.add(5, 3)
-        result2 = calc.add(10, 20)
-        history = calc.get_history()
+        var calc = Calculator()
+        var result1 = calc.add(5, 3)
+        var result2 = calc.add(10, 20)
+        var history = calc.get_history()
         return result1 + result2
     }'''
     
@@ -94,7 +94,7 @@ def test_instance_variable_assignment_a13():
     +++
     
     def main() {
-        account = BankAccount(100)
+        var account = BankAccount(100)
         account.deposit(50)
         account.withdraw(25)
         return account.get_balance()
@@ -109,8 +109,8 @@ def test_class_without_init_method():
     """Test that classes without init() method still work correctly."""
     source = '''
     class Point
-        x = 0
-        y = 0
+        var x = 0
+        var y = 0
         def move(dx, dy) {
             self.x = self.x + dx
             self.y = self.y + dy
@@ -121,10 +121,10 @@ def test_class_without_init_method():
     +++
     
     def main() {
-        point = Point()
+        var point = Point()
         point.move(5, 10)
         point.move(-2, 3)
-        pos = point.get_position()
+        var pos = point.get_position()
         return pos[0] + pos[1]
     }'''
     
@@ -149,8 +149,8 @@ def test_multiple_instances_independence():
     +++
     
     def main() {
-        counter1 = Counter()
-        counter2 = Counter()
+        var counter1 = Counter()
+        var counter2 = Counter()
         
         counter1.increment()
         counter1.increment()
@@ -181,7 +181,7 @@ def test_init_method_with_no_parameters():
     +++
     
     def main() {
-        person = DefaultPerson()
+        var person = DefaultPerson()
         person.set_name("Bob")
         return person.get_name()
     }'''
@@ -205,7 +205,7 @@ def test_init_method_with_type_parameters():
     +++
     
     def main() {
-        person = TypedPerson("Charlie", 25)
+        var person = TypedPerson("Charlie", 25)
         return person.get_info()
     }'''
     
@@ -225,7 +225,7 @@ def test_init_method_type_error():
     +++
     
     def main() {
-        person = TypedPerson("Charlie", "invalid")
+        var person = TypedPerson("Charlie", "invalid")
         return person.name
     }'''
     
@@ -248,8 +248,8 @@ def test_complex_class_with_multiple_methods():
         }
         def remove_item(str name) {
             # Simple removal - just remove first occurrence
-            new_items = []
-            removed = False
+            var new_items = []
+            var removed = False
             # Simplified: just add all items for now (no actual removal logic)
             new_items = self.items
             self.items = new_items
@@ -263,7 +263,7 @@ def test_complex_class_with_multiple_methods():
     +++
     
     def main() {
-        cart = ShoppingCart()
+        var cart = ShoppingCart()
         cart.add_item("apple", 2)
         cart.add_item("banana", 1)
         cart.add_item("apple", 2)
@@ -294,9 +294,9 @@ def test_self_reference_in_nested_calls():
     +++
     
     def main() {
-        math = MathUtils()
-        result1 = math.double(5)
-        result2 = math.triple(4)
+        var math = MathUtils()
+        var result1 = math.double(5)
+        var result2 = math.triple(4)
         return result1 + result2
     }'''
     

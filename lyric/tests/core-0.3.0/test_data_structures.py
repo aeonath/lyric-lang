@@ -14,7 +14,7 @@ def test_list_literal_creation():
     """Test creating list literals."""
     source = '''
     def main() {
-        list_example = [1, 2, 3]
+        var list_example = [1, 2, 3]
         return list_example
     }'''
     
@@ -30,7 +30,7 @@ def test_empty_list_literal():
     """Test creating empty list literals."""
     source = '''
     def main() {
-        empty_list = []
+        var empty_list = []
         return empty_list
     }'''
     
@@ -46,7 +46,7 @@ def test_list_with_mixed_types():
     """Test creating lists with mixed types."""
     source = '''
     def main() {
-        mixed_list = [1, "hello", True, 3.14]
+        var mixed_list = [1, "hello", True, 3.14]
         return mixed_list
     }'''
     
@@ -62,7 +62,7 @@ def test_dictionary_literal_creation():
     """Test creating dictionary literals."""
     source = '''
     def main() {
-        dict_example = {"key": "value", "number": 42}
+        var dict_example = {"key": "value", "number": 42}
         return dict_example
     }'''
     
@@ -78,7 +78,7 @@ def test_empty_dictionary_literal():
     """Test creating empty dictionary literals."""
     source = '''
     def main() {
-        empty_dict = {}
+        var empty_dict = {}
         return empty_dict
     }'''
     
@@ -94,7 +94,7 @@ def test_dictionary_with_mixed_types():
     """Test creating dictionaries with mixed key and value types."""
     source = '''
     def main() {
-        mixed_dict = {"string": 123, 456: "number", "bool": True}
+        var mixed_dict = {"string": 123, 456: "number", "bool": True}
         return mixed_dict
     }'''
     
@@ -110,10 +110,10 @@ def test_list_indexing():
     """Test indexing lists."""
     source = '''
     def main() {
-        my_list = [10, 20, 30]
-        first = my_list[0]
-        second = my_list[1]
-        third = my_list[2]
+        var my_list = [10, 20, 30]
+        var first = my_list[0]
+        var second = my_list[1]
+        var third = my_list[2]
         return first + second + third
     }'''
     
@@ -126,9 +126,9 @@ def test_dictionary_key_lookup():
     """Test dictionary key lookup."""
     source = '''
     def main() {
-        my_dict = {"name": "Alice", "age": 30}
-        name = my_dict["name"]
-        age = my_dict["age"]
+        var my_dict = {"name": "Alice", "age": 30}
+        var name = my_dict["name"]
+        var age = my_dict["age"]
         return name + " is " + str(age)
     }'''
     
@@ -141,7 +141,7 @@ def test_list_index_out_of_range():
     """Test list index out of range error."""
     source = '''
     def main() {
-        my_list = [1, 2, 3]
+        var my_list = [1, 2, 3]
         return my_list[5]
     }'''
     
@@ -154,7 +154,7 @@ def test_dictionary_key_not_found():
     """Test dictionary key not found error."""
     source = '''
     def main() {
-        my_dict = {"name": "Alice"}
+        var my_dict = {"name": "Alice"}
         return my_dict["age"]
     }'''
     
@@ -167,7 +167,7 @@ def test_list_index_type_error():
     """Test list index type error."""
     source = '''
     def main() {
-        my_list = [1, 2, 3]
+        var my_list = [1, 2, 3]
         return my_list["invalid"]
     }'''
     
@@ -180,7 +180,7 @@ def test_cannot_index_non_indexable():
     """Test indexing non-indexable objects."""
     source = '''
     def main() {
-        number = 42
+        var number = 42
         return number[0]
     }'''
     
@@ -193,10 +193,10 @@ def test_len_function():
     """Test len() method with lists and dictionaries."""
     source = '''
     def main() {
-        my_list = [1, 2, 3, 4, 5]
-        my_dict = {"a": 1, "b": 2, "c": 3}
-        list_len = my_list.len()
-        dict_len = my_dict.len()
+        var my_list = [1, 2, 3, 4, 5]
+        var my_dict = {"a": 1, "b": 2, "c": 3}
+        var list_len = my_list.len()
+        var dict_len = my_dict.len()
         return list_len + dict_len
     }'''
     
@@ -209,7 +209,7 @@ def test_append_function():
     """Test append() method."""
     source = '''
     def main() {
-        my_list = [1, 2, 3]
+        var my_list = [1, 2, 3]
         my_list.append(4)
         my_list.append(5)
         return my_list
@@ -234,8 +234,8 @@ def test_keys_function():
     """Test keys() method."""
     source = '''
     def main() {
-        my_dict = {"name": "Alice", "age": 30, "city": "NYC"}
-        dict_keys = my_dict.keys()
+        var my_dict = {"name": "Alice", "age": 30, "city": "NYC"}
+        var dict_keys = my_dict.keys()
         return dict_keys
     }'''
     
@@ -257,8 +257,8 @@ def test_values_function():
     """Test values() method."""
     source = '''
     def main() {
-        my_dict = {"a": 1, "b": 2, "c": 3}
-        dict_values = my_dict.values()
+        var my_dict = {"a": 1, "b": 2, "c": 3}
+        var dict_values = my_dict.values()
         return dict_values
     }'''
     
@@ -280,15 +280,15 @@ def test_nested_data_structures():
     """Test nested lists and dictionaries."""
     source = '''
     def main() {
-        nested = {
+        var nested = {
             "users": [
                 {"name": "Alice", "age": 30},
                 {"name": "Bob", "age": 25}
             ],
             "count": 2
         }
-        first_user = nested["users"][0]
-        first_name = first_user["name"]
+        var first_user = nested["users"][0]
+        var first_name = first_user["name"]
         return first_name
     }'''
     
@@ -301,10 +301,10 @@ def test_list_and_dict_in_expressions():
     """Test lists and dictionaries in expressions."""
     source = '''
     def main() {
-        numbers = [1, 2, 3]
-        info = {"sum": 6, "length": 3}
-        total = numbers[0] + numbers[1] + numbers[2]
-        expected = info["sum"]
+        var numbers = [1, 2, 3]
+        var info = {"sum": 6, "length": 3}
+        var total = numbers[0] + numbers[1] + numbers[2]
+        var expected = info["sum"]
         return total == expected
     }'''
     
@@ -343,15 +343,15 @@ def test_complex_data_structure_operations():
     source = '''
     def main() {
         # Create a list of dictionaries
-        people = [
+        var people = [
             {"name": "Alice", "scores": [85, 90, 88]},
             {"name": "Bob", "scores": [92, 87, 95]}
         ]
         
         # Get first person's average score
-        alice = people[0]
-        alice_scores = alice["scores"]
-        alice_avg = (alice_scores[0] + alice_scores[1] + alice_scores[2]) / 3
+        var alice = people[0]
+        var alice_scores = alice["scores"]
+        var alice_avg = (alice_scores[0] + alice_scores[1] + alice_scores[2]) / 3
         
         return alice_avg
     }'''
@@ -366,8 +366,8 @@ def test_data_structure_modification():
     source = '''
     def main() {
         # Start with empty structures
-        numbers = []
-        info = {}
+        var numbers = []
+        var info = {}
         
         # Add items
         numbers.append(10)

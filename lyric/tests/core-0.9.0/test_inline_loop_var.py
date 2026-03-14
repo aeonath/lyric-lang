@@ -181,8 +181,9 @@ print(total)'''
 class TestInlineLoopVarPersists:
     def test_var_accessible_after_loop(self):
         """Inline-declared variable should persist after the loop."""
-        code = '''for int i in range(5)
-    var x = i
+        code = '''var x
+for int i in range(5)
+    x = i
 done
 print(i)'''
         output = run_code_capture(code)

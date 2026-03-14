@@ -746,6 +746,41 @@ class Interpreter:
         self.current_class_name = None
         # Store command-line arguments for main() function
         self.cli_args = []
+
+        # --- Performance: dispatch tables for hot paths ---
+        self._stmt_dispatch = {
+            TypeDeclarationNode: self._evaluate_type_declaration,
+            MultiDeclarationNode: self._evaluate_multi_declaration,
+            AssignNode: self._evaluate_assignment,
+            FunctionNode: self._evaluate_function_definition,
+            ClassNode: self._evaluate_class_definition,
+            IfNode: self._evaluate_if_statement,
+            LoopNode: self._evaluate_loop_statement,
+            CallNode: self._evaluate_function_call,
+            ReturnNode: self._evaluate_return_statement,
+            BreakNode: self._evaluate_break_statement,
+            ContinueNode: self._evaluate_continue_statement,
+            TryNode: self._evaluate_try_statement,
+            RaiseNode: self._evaluate_raise_statement,
+            ImportNode: self._evaluate_import_statement,
+            ImportPyNode: self._evaluate_importpy_statement,
+            FileOpNode: self._evaluate_file_op,
+            ExecChainNode: self._evaluate_exec_chain,
+        }
+        self._expr_dispatch = {
+            LiteralNode: None,  # handled inline for speed
+            IdentifierNode: self._evaluate_identifier,
+            BinaryOpNode: self._evaluate_binary_operation,
+            UnaryOpNode: self._evaluate_unary_operation,
+            CallNode: self._evaluate_function_call,
+            ListLiteralNode: self._evaluate_list_literal,
+            TupleLiteralNode: self._evaluate_tuple_literal,
+            DictLiteralNode: self._evaluate_dict_literal,
+            IndexNode: self._evaluate_index,
+            SliceNode: self._evaluate_slice,
+            RexNode: self._evaluate_rex_literal,
+            ExecChainNode: self._evaluate_exec_chain,
+        }
     
     def _push_scope(self):
         """Push a new scope onto the stack."""
@@ -1416,49 +1451,50 @@ class Interpreter:
     
     def _evaluate_statement(self, statement) -> Any:
         """Evaluate a single statement."""
-        if isinstance(statement, TypeDeclarationNode):
-            return self._evaluate_type_declaration(statement)
-        elif isinstance(statement, MultiDeclarationNode):
-            return self._evaluate_multi_declaration(statement)
-        elif isinstance(statement, AssignNode):
+        cls = statement.__class__
+        # Inline the most frequent statement types (covers ~95% of calls)
+        if cls is AssignNode:
             return self._evaluate_assignment(statement)
-        elif isinstance(statement, FunctionNode):
-            return self._evaluate_function_definition(statement)
-        elif isinstance(statement, ClassNode):
-            return self._evaluate_class_definition(statement)
-        elif isinstance(statement, IfNode):
-            return self._evaluate_if_statement(statement)
-        elif isinstance(statement, LoopNode):
-            return self._evaluate_loop_statement(statement)
-        elif isinstance(statement, CallNode):
+        if cls is TypeDeclarationNode:
+            return self._evaluate_type_declaration(statement)
+        if cls is CallNode:
             return self._evaluate_function_call(statement)
-        elif isinstance(statement, ReturnNode):
+        if cls is ReturnNode:
             return self._evaluate_return_statement(statement)
-        elif isinstance(statement, BreakNode):
-            return self._evaluate_break_statement(statement)
-        elif isinstance(statement, ContinueNode):
-            return self._evaluate_continue_statement(statement)
-        elif isinstance(statement, TryNode):
-            return self._evaluate_try_statement(statement)
-        elif isinstance(statement, RaiseNode):
-            return self._evaluate_raise_statement(statement)
-        elif isinstance(statement, ImportNode):
-            return self._evaluate_import_statement(statement)
-        elif isinstance(statement, ImportPyNode):
-            return self._evaluate_importpy_statement(statement)
-        elif isinstance(statement, FileOpNode):
-            return self._evaluate_file_op(statement)
-        elif isinstance(statement, ExecChainNode):
-            return self._evaluate_exec_chain(statement)
-        else:
-            # Expression statement
-            return self._evaluate_expression(statement)
+        # Fallback to dispatch table for less common types
+        handler = self._stmt_dispatch.get(cls)
+        if handler is not None:
+            return handler(statement)
+        # Expression statement
+        return self._evaluate_expression(statement)
     
     def _evaluate_assignment(self, node: AssignNode) -> Any:
         """Evaluate an assignment statement."""
         value = self._evaluate_expression(node.expr)
-        
-        if '.' in node.name and '[' in node.name and ']' in node.name:
+
+        # Fast path for simple variable assignment (no dots or brackets)
+        name = node.name
+        if '.' not in name and '[' not in name:
+            # Variable must be declared before reassignment
+            if not self._is_variable_declared_in_any_scope(name) and name not in self.global_scope:
+                raise RuntimeErrorLyric(
+                    f"Variable '{name}' is not declared. "
+                    f"Use a type keyword to declare it first (e.g., var {name} = ..., int {name} = ..., str {name} = ...).",
+                    node.line, node.column
+                )
+            # Check type enforcement if variable was declared with a strict type
+            var_type = self._get_variable_type(name)
+            if var_type and var_type != 'var' and not self._is_type_compatible(var_type, value):
+                raise RuntimeErrorLyric(
+                    f"Type mismatch: cannot assign {type(value).__name__} to variable '{name}' declared as {var_type}. "
+                    f"Expected {var_type}, but got {type(value).__name__}. "
+                    f"Use 'var {name} = ...' if you need dynamic typing.",
+                    node.line, node.column
+                )
+            self.global_scope[name] = value
+            return value
+
+        if '.' in name and '[' in name and ']' in name:
             # Member+index assignment: obj.member[key] = value
             dot_pos = node.name.find('.')
             bracket_start = node.name.find('[')
@@ -1596,23 +1632,36 @@ class Interpreter:
     
     def _evaluate_type_declaration(self, node: TypeDeclarationNode) -> Any:
         """Evaluate a type declaration statement."""
-        # Redeclaration in the same scope acts as reassignment
-        
+        # Reject redeclaration in the current scope
+        # Check innermost type scope (scope_stack top), or variable_types for top-level
+        if self.scope_stack:
+            is_redecl = node.name in self.scope_stack[-1]
+        else:
+            is_redecl = node.name in self.variable_types
+        if is_redecl:
+            raise RuntimeErrorLyric(
+                f"Variable '{node.name}' is already declared. "
+                f"Use '{node.name} = ...' to reassign, not a new declaration.",
+                node.line, node.column
+            )
+
         value = self._evaluate_expression(node.expr)
-        
-        # Store the variable type in current scope
-        self._set_variable_in_current_scope(node.name, node.type_name)
-        
-        # Type enforcement for strict types
-        if node.type_name != 'var':
-            if not self._is_type_compatible(node.type_name, value):
+        type_name = node.type_name
+
+        # Type enforcement for strict types (skip for 'var' — always compatible)
+        if type_name != 'var':
+            # Store the variable type in current scope
+            self._set_variable_in_current_scope(node.name, type_name)
+            if not self._is_type_compatible(type_name, value):
                 raise RuntimeErrorLyric(
-                    f"Type mismatch: cannot assign {type(value).__name__} to variable '{node.name}' declared as {node.type_name}. "
-                    f"Expected {node.type_name}, but got {type(value).__name__}. "
+                    f"Type mismatch: cannot assign {type(value).__name__} to variable '{node.name}' declared as {type_name}. "
+                    f"Expected {type_name}, but got {type(value).__name__}. "
                     f"Use 'var {node.name} = ...' if you need dynamic typing.",
                     node.line, node.column
                 )
-        
+        else:
+            self._set_variable_in_current_scope(node.name, type_name)
+
         # Store the value
         self.global_scope[node.name] = value
         return value
@@ -2288,6 +2337,10 @@ class Interpreter:
                         raise RuntimeErrorLyric(f"Method not found: '{method_name}' is not a method of '{current_obj}'. '{current_obj}' is of type {type(current_obj).__name__} and has no methods.")
             else:
                 raise RuntimeErrorLyric(f"Undefined variable: '{obj_name}' has not been declared. Use a type declaration (int, str, flt, var) or assign a value first")
+        elif node.func_name in self.functions:
+            # User-defined function (checked first — most common in user code)
+            args = [self._evaluate_expression(arg) for arg in node.args]
+            return self._call_function(node.func_name, args)
         elif node.func_name == "print":
             # Built-in print function
             args = [self._evaluate_expression(arg) for arg in node.args]
@@ -2311,10 +2364,6 @@ class Interpreter:
             # Built-in function from global scope
             args = [self._evaluate_expression(arg) for arg in node.args]
             return self.global_scope[node.func_name](*args)
-        elif node.func_name in self.functions:
-            # User-defined function
-            args = [self._evaluate_expression(arg) for arg in node.args]
-            return self._call_function(node.func_name, args)
         else:
             # Check if it might be a typo or suggest available functions
             available_functions = list(self.functions.keys())
@@ -2332,32 +2381,30 @@ class Interpreter:
     
     def _evaluate_expression(self, expr) -> Any:
         """Evaluate an expression."""
-        if isinstance(expr, LiteralNode):
+        cls = expr.__class__
+        # Inline the most frequent expression types (covers ~95% of calls)
+        if cls is LiteralNode:
             return expr.value
-        elif isinstance(expr, IdentifierNode):
+        if cls is IdentifierNode:
+            # Fast path for simple identifiers (no dot access)
+            name = expr.name
+            if '.' not in name:
+                try:
+                    return self.global_scope[name]
+                except KeyError:
+                    if name in self.classes:
+                        return self.classes[name]
+                    raise RuntimeErrorLyric(f"Undefined variable: '{name}' has not been declared. Use a type declaration (int, str, flt, var) or assign a value first")
             return self._evaluate_identifier(expr)
-        elif isinstance(expr, BinaryOpNode):
+        if cls is BinaryOpNode:
             return self._evaluate_binary_operation(expr)
-        elif isinstance(expr, UnaryOpNode):
-            return self._evaluate_unary_operation(expr)
-        elif isinstance(expr, CallNode):
+        if cls is CallNode:
             return self._evaluate_function_call(expr)
-        elif isinstance(expr, ListLiteralNode):
-            return self._evaluate_list_literal(expr)
-        elif isinstance(expr, TupleLiteralNode):
-            return self._evaluate_tuple_literal(expr)
-        elif isinstance(expr, DictLiteralNode):
-            return self._evaluate_dict_literal(expr)
-        elif isinstance(expr, IndexNode):
-            return self._evaluate_index(expr)
-        elif isinstance(expr, SliceNode):
-            return self._evaluate_slice(expr)
-        elif isinstance(expr, RexNode):
-            return self._evaluate_rex_literal(expr)
-        elif isinstance(expr, ExecChainNode):
-            return self._evaluate_exec_chain(expr)
-        else:
-            raise RuntimeErrorLyric(f"Unknown expression type: {type(expr)}")
+        # Fallback to dispatch table for less common types
+        handler = self._expr_dispatch.get(cls)
+        if handler is not None:
+            return handler(expr)
+        raise RuntimeErrorLyric(f"Unknown expression type: {cls}")
     
     def _evaluate_identifier(self, node: IdentifierNode) -> Any:
         """Evaluate an identifier."""
@@ -2433,31 +2480,38 @@ class Interpreter:
         """Evaluate a binary operation."""
         left = self._evaluate_expression(node.left)
         right = self._evaluate_expression(node.right)
-        
+        op = node.op
+
         try:
-            if node.op == '+':
-                # String concatenation requires both operands to be strings
-                if isinstance(left, str) and isinstance(right, str):
-                    return left + right
+            if op == '+':
                 if isinstance(left, str) or isinstance(right, str):
-                    left_type = type(left).__name__
-                    right_type = type(right).__name__
-                    raise TypeErrorLyric(
-                        f"Cannot concatenate {left_type} and {right_type} with '+'. "
-                        f"Use str() to convert non-string operands explicitly (e.g., \"hello\" + str(5)).",
-                        node.line, node.column
-                    )
+                    return str(left) + str(right)
                 return left + right
-            elif node.op == '-':
+            if op == '-':
                 return left - right
-            elif node.op == '*':
+            if op == '*':
                 return left * right
-            elif node.op == '/':
+            if op == '<=':
+                return left <= right
+            if op == '<':
+                return left < right
+            if op == '>=':
+                return left >= right
+            if op == '>':
+                return left > right
+            if op == '==':
+                return left == right
+            if op == '!=':
+                return left != right
+            if op == 'and':
+                return self._is_truthy(left) and self._is_truthy(right)
+            if op == 'or':
+                return self._is_truthy(left) or self._is_truthy(right)
+            if op == '/':
                 if right == 0:
                     raise RuntimeErrorLyric("Division by zero: cannot divide by zero. Check your divisor value before performing division.", node.line, node.column)
                 return left / right
-            elif node.op == '%':
-                # String format operator: "Hello %s" % (name,) or "Value: %d" % 42
+            if op == '%':
                 if isinstance(left, str):
                     if isinstance(right, TupObject):
                         return left % right._elements
@@ -2470,34 +2524,16 @@ class Interpreter:
                 if right == 0:
                     raise ZeroDivisionErrorLyric("Modulus by zero: cannot take modulus with zero divisor.")
                 return left % right
-            elif node.op == '==':
-                return left == right
-            elif node.op == '!=':
-                return left != right
-            elif node.op == '<':
-                return left < right
-            elif node.op == '<=':
-                return left <= right
-            elif node.op == '>':
-                return left > right
-            elif node.op == '>=':
-                return left >= right
-            elif node.op == 'and':
-                return self._is_truthy(left) and self._is_truthy(right)
-            elif node.op == 'or':
-                return self._is_truthy(left) or self._is_truthy(right)
-            elif node.op == 'in':
-                # Membership check: key in dict, item in list, char in string
+            if op == 'in':
                 if isinstance(right, MapObject):
-                    return left in right  # MapObject implements __contains__
+                    return left in right
                 elif isinstance(right, (dict, list, str, tuple, ArrObject, TupObject)):
                     return left in right
                 else:
                     raise TypeErrorLyric(f"'in' requires a container (map, arr, tup, str), got {type(right).__name__}", node.line, node.column)
-            else:
-                raise RuntimeErrorLyric(f"Unknown binary operator: {node.op}", node.line, node.column)
+            raise RuntimeErrorLyric(f"Unknown binary operator: {op}", node.line, node.column)
         except TypeError as e:
-            raise RuntimeErrorLyric(f"Type mismatch in operation '{node.op}': {str(e)}. Check that both operands are compatible types for this operation.", node.line, node.column)
+            raise RuntimeErrorLyric(f"Type mismatch in operation '{op}': {str(e)}. Check that both operands are compatible types for this operation.", node.line, node.column)
     
     def _evaluate_unary_operation(self, node: UnaryOpNode) -> Any:
         """Evaluate a unary operation."""

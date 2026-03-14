@@ -33,7 +33,7 @@ def test_case_parses_correctly():
     """Verify that 'case' parses correctly in if statements."""
     source = """
 def main() {
-    x = 4
+    var x = 4
     if x > 5:
         print("high")
     case x > 3:
@@ -69,7 +69,7 @@ def test_case_executes_correctly():
     """Verify that 'case' executes with the same logic flow as 'elif'."""
     source = """
 def main() {
-    x = 7
+    var x = 7
     if x > 10:
         print("high")
     case x > 5:
@@ -101,7 +101,7 @@ def test_mixed_elif_and_case():
     """Verify that mixing 'elif' and 'case' works correctly."""
     source = """
 def main() {
-    x = 4
+    var x = 4
     if x > 10:
         print("high")
     elif x > 5:
@@ -138,7 +138,7 @@ def test_multiple_case_statements():
     """Verify multiple 'case' statements work correctly."""
     source = """
 def main() {
-    x = 2
+    var x = 2
     if x > 5:
         print("high")
     case x > 3:
@@ -173,7 +173,7 @@ def test_case_with_else():
     """Verify that 'case' works with 'else' clause."""
     source = """
 def main() {
-    x = 1
+    var x = 1
     if x > 5:
         print("high")
     case x > 3:
@@ -207,7 +207,7 @@ def test_case_without_else():
     """Verify that 'case' works without 'else' clause."""
     source = """
 def main() {
-    x = 4
+    var x = 4
     if x > 5:
         print("high")
     case x > 3:
@@ -238,7 +238,7 @@ def test_case_only_no_if():
     """Verify that 'case' requires an 'if' statement first."""
     source = """
 def main() {
-    x = 4
+    var x = 4
     case x > 3:  # Should cause parse error - case must follow if
         print("medium")
     end

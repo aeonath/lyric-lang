@@ -83,18 +83,18 @@ def test_error_message_format():
     """Test that error messages include line numbers."""
     source = """
 def main() {
-    x = 5
+    var x = 5
     print(undefined_var)
 }"""
-    
+
     ast = parse(source)
-    
+
     with pytest.raises((RuntimeErrorLyric, NameErrorLyric)) as exc_info:
         evaluate(ast)
-    
+
     error = exc_info.value
     error_str = str(error)
-    
+
     # Error message should be informative
     assert len(error_str) > 0
     assert "undefined_var" in error_str or "not defined" in error_str
@@ -104,9 +104,9 @@ def test_division_by_zero_error():
     """Test division by zero error."""
     source = """
 def main() {
-    x = 5
-    y = 0
-    z = x / y
+    var x = 5
+    var y = 0
+    var z = x / y
 }"""
     
     ast = parse(source)

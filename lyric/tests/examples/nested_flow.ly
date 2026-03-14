@@ -2,7 +2,7 @@ def main() {
     print("Testing nested control flow in Lyric")
     
     # Test nested if statements
-    x = 5
+    var x = 5
     if x > 0:
         print("x is positive")
         if x > 3:
@@ -39,7 +39,7 @@ def main() {
     
     # Test complex nested structure
     print("\nTesting complex nested structure:")
-    y = 2
+    var y = 2
     if x > 0:
         print("x is positive")
         if y > 1:

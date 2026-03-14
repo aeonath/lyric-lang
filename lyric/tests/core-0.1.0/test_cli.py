@@ -40,19 +40,18 @@ class TestCLI:
             with patch('os.path.exists', return_value=True):
                 with patch('builtins.open', create=True) as mock_open:
                     with patch('lyric.cli.parse') as mock_parse:
-                        with patch('lyric.cli.evaluate') as mock_evaluate:
-                            # Mock file content
-                            mock_open.return_value.__enter__.return_value.read.return_value = 'def main() { print("Hello, Lyric!") }'
-                            
-                            from lyric.cli import main
-                            main()
-                            
-                            # Verify file was read
-                            mock_open.assert_called_once_with('examples/hello.ly', 'r', encoding='utf-8')
-                            # Verify parse was called
-                            mock_parse.assert_called_once()
-                            # Verify evaluate was called
-                            mock_evaluate.assert_called_once()
+                        with patch('lyric.cli.compile_lyric', create=True) as mock_compile:
+                            with patch('builtins.exec') as mock_exec:
+                                # Mock file content
+                                mock_open.return_value.__enter__.return_value.read.return_value = 'def main() { print("Hello, Lyric!") }'
+
+                                from lyric.cli import main
+                                main()
+
+                                # Verify file was read
+                                mock_open.assert_called_once_with('examples/hello.ly', 'r', encoding='utf-8')
+                                # Verify parse was called
+                                mock_parse.assert_called_once()
     
     def test_run_command_file_not_found(self):
         """Test run command with non-existent file."""

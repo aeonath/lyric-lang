@@ -24,7 +24,7 @@ class TestControlStructureSyntaxSimplification:
     def test_if_statement_colonless_syntax(self):
         """Test that if statements work without colons."""
         source = '''def main() {
-x = 5
+var x = 5
 if x > 0
 print("positive")
 end
@@ -50,7 +50,7 @@ end
     def test_if_else_statement_colonless_syntax(self):
         """Test that if/else statements work without colons."""
         source = '''def main() {
-x = -1
+var x = -1
 if x > 0
 print("positive")
 else
@@ -78,7 +78,7 @@ end
     def test_if_elif_else_statement_colonless_syntax(self):
         """Test that if/elif/else statements work without colons."""
         source = '''def main() {
-x = 0
+var x = 0
 if x > 0
 print("positive")
 elif x == 0
@@ -134,7 +134,7 @@ done
     def test_given_while_loop_colonless_syntax(self):
         """Test that given while loops work without colons."""
         source = '''def main() {
-x = 3
+var x = 3
 given x > 0
 print("looping")
 x = x - 1
@@ -161,7 +161,7 @@ done
     def test_nested_control_structures_colonless_syntax(self):
         """Test nested control structures without colons."""
         source = '''def main() {
-x = 1
+var x = 1
 given x < 3
 if x == 1
 print("first")
@@ -193,7 +193,7 @@ done
     def test_if_statement_with_colon_works_without_warning(self):
         """Test that if statements with colons work without deprecation warnings."""
         source = '''def main() {
-x = 5
+var x = 5
 if x > 0:
 print("positive")
 end
@@ -247,7 +247,7 @@ done
     def test_else_with_colon_works_without_warning(self):
         """Test that else statements with colons work without deprecation warnings."""
         source = '''def main() {
-x = -1
+var x = -1
 if x > 0:
 print("positive")
 else:
@@ -276,7 +276,7 @@ end
     def test_elif_with_colon_works_without_warning(self):
         """Test that elif statements with colons work without deprecation warnings."""
         source = '''def main() {
-x = 0
+var x = 0
 if x > 0:
 print("positive")
 elif x == 0:
@@ -477,7 +477,7 @@ print("class created")
     def test_complex_nested_structures_colonless_syntax(self):
         """Test complex nested control structures without colons."""
         source = '''def main() {
-x = 1
+var x = 1
 given x < 3
 if x == 1
 print("first iteration")

@@ -1,6 +1,6 @@
 class Person:
-    name = "Guest"
-    age = 25
+    var name = "Guest"
+    var age = 25
     
     def greet() {
         print("Hello, I'm", self.name)
@@ -17,8 +17,8 @@ class Person:
 +++
 
 class Student
-    name = "Student"
-    grade = "A"
+    var name = "Student"
+    var grade = "A"
     
     def introduce() {
         print("Hi, I'm", self.name)
@@ -30,8 +30,8 @@ def main() {
     print("Testing class functionality in Lyric")
     
     # Create instances
-    person = Person()
-    student = Student()
+    var person = Person()
+    var student = Student()
     
     # Test basic functionality
     print("\n=== Person Tests ===")
